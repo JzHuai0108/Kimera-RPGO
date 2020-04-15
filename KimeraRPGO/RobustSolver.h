@@ -17,6 +17,7 @@ author: Yun Chang, Luca Carlone
 #include "KimeraRPGO/GenericSolver.h"
 #include "KimeraRPGO/SolverParams.h"
 #include "KimeraRPGO/outlier/OutlierRemoval.h"
+#include "KimeraRPGO/outlier/pcm.h"
 
 namespace KimeraRPGO {
 
@@ -43,7 +44,8 @@ class RobustSolver : public GenericSolver {
    */
   void update(
       const gtsam::NonlinearFactorGraph& nfg = gtsam::NonlinearFactorGraph(),
-      const gtsam::Values& values = gtsam::Values());
+      const gtsam::Values& values = gtsam::Values(),
+      FactorType factor_type = FactorType::UNCLASSIFIED);
 
   /*! \brief Update call that bypasses outlier rejection.
    *  add new factors and values and optimize, without rejecting outliers.

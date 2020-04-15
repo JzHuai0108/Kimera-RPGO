@@ -13,7 +13,6 @@ author: Yun Chang, Luca Carlone
 #include <gtsam/slam/dataset.h>
 
 #include "KimeraRPGO/logger.h"
-#include "KimeraRPGO/outlier/pcm.h"
 
 namespace KimeraRPGO {
 
@@ -97,13 +96,15 @@ void RobustSolver::optimize() {
 }
 
 void RobustSolver::update(const gtsam::NonlinearFactorGraph& nfg,
-                          const gtsam::Values& values) {
+                          const gtsam::Values& values,
+                          FactorType factor_type) {
   // loop closures/outlier rejection
   bool process_lc;
-  if (outlier_removal_) {
+  if (outlier_removal_ && factor_type != FactorType::NONSEQUENTIAL_ODOMETRY) {
     process_lc = outlier_removal_->removeOutliers(nfg, values, nfg_, values_);
   } else {
     process_lc = addAndCheckIfOptimize(nfg, values);  // use default process
+    process_lc = factor_type == FactorType::NONBETWEEN_FACTORS ? false : process_lc;
   }
 
   // optimize

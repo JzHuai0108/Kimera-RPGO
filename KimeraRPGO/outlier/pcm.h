@@ -44,6 +44,7 @@ enum class FactorType {
   LOOP_CLOSURES = 3,
   // both between poses and landmark re-observations (may be more than 1)
   NONBETWEEN_FACTORS = 4,  // not handled by PCM (may be more than 1)
+  NONSEQUENTIAL_ODOMETRY = 5,
 };
 
 // poseT can be gtsam::Pose2 or Pose3 for 3D vs 3D
