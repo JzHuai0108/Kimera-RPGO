@@ -42,7 +42,7 @@ class RobustSolver : public GenericSolver {
    *  - nfg: new factors
    *  - values: linearization point for new variables
    */
-  void update(
+  bool update(
       const gtsam::NonlinearFactorGraph& nfg = gtsam::NonlinearFactorGraph(),
       const gtsam::Values& values = gtsam::Values(),
       FactorType factor_type = FactorType::UNCLASSIFIED);

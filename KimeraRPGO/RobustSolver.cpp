@@ -95,22 +95,28 @@ void RobustSolver::optimize() {
   }
 }
 
-void RobustSolver::update(const gtsam::NonlinearFactorGraph& nfg,
+bool RobustSolver::update(const gtsam::NonlinearFactorGraph& nfg,
                           const gtsam::Values& values,
                           FactorType factor_type) {
   // loop closures/outlier rejection
   bool process_lc;
-  if (outlier_removal_ && factor_type != FactorType::NONSEQUENTIAL_ODOMETRY) {
-    process_lc = outlier_removal_->removeOutliers(nfg, values, nfg_, values_);
+  if (outlier_removal_) {
+    if (factor_type == FactorType::NONSEQUENTIAL_ODOMETRY) {
+      outlier_removal_->addSpecialFactors(nfg, values, nfg_, values_);
+      process_lc = false;
+    } else {
+      process_lc = outlier_removal_->removeOutliers(nfg, values, nfg_, values_);
+    }
   } else {
     process_lc = addAndCheckIfOptimize(nfg, values);  // use default process
-    process_lc = factor_type == FactorType::NONBETWEEN_FACTORS ? false : process_lc;
+    process_lc = factor_type == FactorType::NONSEQUENTIAL_ODOMETRY ? false : process_lc;
   }
 
   // optimize
   if (process_lc) {
     optimize();
   }
+  return process_lc;
 }
 
 void RobustSolver::forceUpdate(const gtsam::NonlinearFactorGraph& nfg,

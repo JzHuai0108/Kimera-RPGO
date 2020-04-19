@@ -228,6 +228,15 @@ class Pcm : public OutlierRemoval {
     return doOptimize;
   }  // end reject outliers
 
+  void addSpecialFactors(const gtsam::NonlinearFactorGraph& new_factors,
+                         const gtsam::Values& new_values,
+                         gtsam::NonlinearFactorGraph& output_nfg,
+                         gtsam::Values& output_values) override {
+    output_values.insert(new_values);
+    nfg_special_.add(new_factors);
+    output_nfg = buildGraphToOptimize();
+  }
+
   /*! \brief save the PCM data
    *  saves the distance matrix (final) and also the clique size info
    *  - folder_path: path to directory to save results in
