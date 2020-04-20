@@ -25,7 +25,7 @@ namespace KimeraRPGO {
 /** \getting the dimensions of various Lie types
  *   \simple helper functions */
 template <class T>
-static const size_t getRotationDim() {
+static size_t getRotationDim() {
   // get rotation dimension of some gtsam object
   BOOST_CONCEPT_ASSERT((gtsam::IsLieGroup<T>));
   T sample_object;
@@ -33,7 +33,7 @@ static const size_t getRotationDim() {
 }
 
 template <class T>
-static const size_t getTranslationDim() {
+static size_t getTranslationDim() {
   // get translation dimension of some gtsam object
   BOOST_CONCEPT_ASSERT((gtsam::IsLieGroup<T>));
   T sample_object;
@@ -41,7 +41,7 @@ static const size_t getTranslationDim() {
 }
 
 template <class T>
-static const size_t getDim() {
+static size_t getDim() {
   // get overall dimension of some gtsam object
   BOOST_CONCEPT_ASSERT((gtsam::IsLieGroup<T>));
   T sample_object;

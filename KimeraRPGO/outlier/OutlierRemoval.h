@@ -19,8 +19,8 @@ class OutlierRemoval {
   OutlierRemoval() = default;
   virtual ~OutlierRemoval() = default;
 
-  virtual size_t getNumLC() {}
-  virtual size_t getNumLCInliers() {}
+  virtual size_t getNumLC() { return 0; }
+  virtual size_t getNumLCInliers() { return 0; }
 
   /*! \brief Process new measurements and reject outliers
    *  process the new measurements and update the "good set" of measurements
@@ -51,7 +51,7 @@ class OutlierRemoval {
   /*! \brief Save any data in the outlier removal process
    *  - folder_path: path to directory to save results in
    */
-  virtual void saveData(std::string folder_path) {}
+  virtual void saveData(std::string /*folder_path*/) {}
 
   /*! \brief Supressing the print messages to console
    */
