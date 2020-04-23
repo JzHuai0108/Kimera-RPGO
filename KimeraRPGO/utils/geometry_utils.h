@@ -219,19 +219,19 @@ struct PoseWithNode {
   /* construct from gtsam between factor  --------------------- */
   explicit PoseWithNode(const gtsam::BetweenFactor<T>& between_factor) {
     pose = between_factor.measured();
-    gtsam::Matrix covar =
-        boost::dynamic_pointer_cast<gtsam::noiseModel::Gaussian>(
-            between_factor.get_noiseModel())
-            ->covariance();
+//    gtsam::Matrix covar =
+//        boost::dynamic_pointer_cast<gtsam::noiseModel::Gaussian>(
+//            between_factor.get_noiseModel())
+//            ->covariance();
 
     // prevent propagation of nan values in the edge case
     const int dim = getDim<T>();
     const int r_dim = getRotationDim<T>();
     const int t_dim = getTranslationDim<T>();
     rotation_info = true;
-    if (std::isnan(covar.block(0, 0, r_dim, r_dim).trace())) {
-      rotation_info = false;
-    }
+//    if (std::isnan(covar.block(0, 0, r_dim, r_dim).trace())) {
+//      rotation_info = false;
+//    }
     node = 1;
   }
 
