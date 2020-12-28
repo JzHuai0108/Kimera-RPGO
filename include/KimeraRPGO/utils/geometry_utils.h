@@ -218,6 +218,8 @@ struct PoseWithNode {
   /* construct from gtsam between factor  --------------------- */
   explicit PoseWithNode(const gtsam::BetweenFactor<T>& between_factor) {
     pose = between_factor.measured();
+    // TODO(jhuai): The below is commented out because it prevents using robust noise models.
+    // But after commenting it out, LandmarkPcmSimple in testLandmark has failures.
 //    gtsam::Matrix covar =
 //        boost::dynamic_pointer_cast<gtsam::noiseModel::Gaussian>(
 //            between_factor.noiseModel())
