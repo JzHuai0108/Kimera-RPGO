@@ -16,6 +16,7 @@ author: Yun Chang, Luca Carlone
 #include "KimeraRPGO/GenericSolver.h"
 #include "KimeraRPGO/SolverParams.h"
 #include "KimeraRPGO/outlier/OutlierRemoval.h"
+#include "KimeraRPGO/outlier/pcm.h"
 
 namespace KimeraRPGO {
 
@@ -50,8 +51,10 @@ class RobustSolver : public GenericSolver {
    *  - factors: the factors of the graph to be added
    *  - values: linearization point of graph to be connected
    */
-  void update(const gtsam::NonlinearFactorGraph& factors,
-              const gtsam::Values& values = gtsam::Values());
+  bool update(
+      const gtsam::NonlinearFactorGraph& factors,
+      const gtsam::Values& values = gtsam::Values(),
+      FactorType factor_type = FactorType::UNCLASSIFIED);
 
   /*! \brief Remove last added loop closure based on the prefixes of the robots
    * For example, to remove the last measure loop closure between robots a and c

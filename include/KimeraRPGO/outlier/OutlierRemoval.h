@@ -37,10 +37,22 @@ class OutlierRemoval {
                               gtsam::NonlinearFactorGraph* nfg,
                               gtsam::Values* values) = 0;
 
+  /**
+   * @brief addSpecialFactors add factors without screening
+   * @param new_factors
+   * @param new_values
+   * @param output_nfg
+   * @param output_values
+   */
+  virtual void addSpecialFactors(const gtsam::NonlinearFactorGraph& /*new_factors*/,
+                         const gtsam::Values& /*new_values*/,
+                         gtsam::NonlinearFactorGraph* /*output_nfg*/,
+                         gtsam::Values* /*output_values*/) {}
+
   /*! \brief Save any data in the outlier removal process
    *  - folder_path: path to directory to save results in
    */
-  virtual void saveData(std::string folder_path) {}
+  virtual void saveData(std::string /*folder_path*/) {}
 
   /*! \brief Supressing the print messages to console
    */

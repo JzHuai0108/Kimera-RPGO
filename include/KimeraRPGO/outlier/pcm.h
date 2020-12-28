@@ -42,6 +42,7 @@ enum class FactorType {
   LOOP_CLOSURE = 3,
   // both between poses and landmark re-observations (may be more than 1)
   NONBETWEEN_FACTORS = 4,  // not handled by PCM (may be more than 1)
+  NONSEQUENTIAL_ODOMETRY = 5,
 };
 
 // poseT can be gtsam::Pose2 or Pose3 for 3D vs 3D
@@ -208,6 +209,15 @@ class Pcm : public OutlierRemoval {
     return do_optimize;
   }  // end reject outliers
 
+  void addSpecialFactors(const gtsam::NonlinearFactorGraph& new_factors,
+                         const gtsam::Values& new_values,
+                         gtsam::NonlinearFactorGraph* output_nfg,
+                         gtsam::Values* output_values) override {
+    output_values->insert(new_values);
+    nfg_special_.add(new_factors);
+    *output_nfg = buildGraphToOptimize();
+  }
+  
   /*! \brief save the PCM data
    *  saves the distance matrix (final) and also the clique size info
    *  - folder_path: path to directory to save results in

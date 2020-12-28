@@ -16,7 +16,6 @@ author: Yun Chang, Luca Carlone
 #include <gtsam/slam/dataset.h>
 
 #include "KimeraRPGO/logger.h"
-#include "KimeraRPGO/outlier/pcm.h"
 #include "KimeraRPGO/utils/type_utils.h"
 
 namespace KimeraRPGO {
@@ -113,18 +112,25 @@ void RobustSolver::forceUpdate(const gtsam::NonlinearFactorGraph& nfg,
   optimize();
 }
 
-void RobustSolver::update(const gtsam::NonlinearFactorGraph& factors,
-                          const gtsam::Values& values) {
+bool RobustSolver::update(const gtsam::NonlinearFactorGraph& factors,
+                          const gtsam::Values& values,
+                          FactorType factor_type) {
   bool do_optimize;
   if (outlier_removal_) {
-    do_optimize =
-        outlier_removal_->removeOutliers(factors, values, &nfg_, &values_);
+    if (factor_type == FactorType::NONSEQUENTIAL_ODOMETRY) {
+      outlier_removal_->addSpecialFactors(factors, values, &nfg_, &values_);
+      do_optimize = false;
+    } else {
+      do_optimize = outlier_removal_->removeOutliers(factors, values, &nfg_, &values_);
+    }
   } else {
     do_optimize = addAndCheckIfOptimize(factors, values);
+    do_optimize = factor_type == FactorType::NONSEQUENTIAL_ODOMETRY ? false : do_optimize;
   }
 
-  if (do_optimize) optimize();  // optimize once after loading
-  return;
+  if (do_optimize) optimize();
+
+  return do_optimize;
 }
 
 void RobustSolver::removeLastLoopClosure(char prefix_1, char prefix_2) {
